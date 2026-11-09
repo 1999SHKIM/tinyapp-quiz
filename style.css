@@ -1,0 +1,32 @@
+/* TinyArcade 11번 확인용 임시 스타일 (28번 퀴즈 개발 때 교체) */
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  font-family: system-ui, sans-serif;
+  background: #f5f2ee;
+}
+
+.card {
+  padding: 24px 32px;
+  border-radius: 12px;
+  background: #fff;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+button {
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 8px;
+  background: #ff6b5b;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#count {
+  font-size: 32px;
+  font-weight: bold;
+}
