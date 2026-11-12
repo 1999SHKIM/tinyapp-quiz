@@ -2,8 +2,10 @@
 // - 시간은 밀리초로 통일하여 화면 표시와 정답 판정이 같은 기준을 쓰게 한다.
 export const MAX_STAGES = 20
 export const SPECIAL_EVERY = 5
-export const OX_LIMIT_MS = 5000
-export const MC_LIMIT_MS = 15000
+// - 제한시간: 문제를 모두 코드 읽기 문제로 바꾸면서 OX 5초 → 8초, 객관식 15초 → 20초로 늘렸다(11/12 결정).
+//   퀴즈 명세 §시간 "추후 개발 단계에 수정될 수 있다". 시간 보너스는 비율 계산이라 최고 점수는 그대로다.
+export const OX_LIMIT_MS = 8000
+export const MC_LIMIT_MS = 20000
 export const OX_POINTS = 100
 export const MC_POINTS = 200
 export const TIME_BONUS_MAX = 50
