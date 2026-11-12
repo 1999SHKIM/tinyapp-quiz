@@ -1,26 +1,14 @@
 <!doctype html>
 <html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TinyArcade 테스트 페이지</title>
-  <!-- 상대 경로로 불러온다: 플랫폼이 /apps/{deployKey}/ 아래에서 파일을 전달하므로 "/style.css"처럼 맨 앞에 / 를 쓰면 안 된다 -->
-  <link rel="stylesheet" href="./style.css" />
-</head>
-<body>
-  <main class="card">
-    <h1>TinyArcade 테스트 페이지</h1>
-    <p>11번(앱 등록·배포)·13번(SDK 연결) 확인용 임시 페이지입니다. 28번 개념 퀴즈 개발 때 교체합니다.</p>
-    <p id="status">JS 불러오는 중...</p>
-    <p>
-      <button id="start" type="button">① 게임 시작</button>
-      <input id="score" type="number" value="850" step="0.01" />
-      <button id="submit" type="button">② 점수 제출</button>
-    </p>
-    <pre id="log"></pre>
-  </main>
-  <!-- 13번: SDK 복사본 (원본 https://tinyarcade-two.vercel.app/sdk/tinyarcade-sdk.js) -->
-  <script src="./tinyarcade-sdk.js"></script>
-  <script src="./main.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>개념 퀴즈 (Java)</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <!-- [참고] 앱 실행 전에 플랫폼 SDK를 준비한다. SDK 원본은 public에 보관한다. -->
+    <script src="./tinyarcade-sdk.js"></script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
