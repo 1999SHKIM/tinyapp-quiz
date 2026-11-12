@@ -1,0 +1,420 @@
+{
+  "language": "java",
+  "topics": [
+    { "id": "variable_operator", "name": "변수와 연산자" },
+    { "id": "condition_loop", "name": "조건문과 반복문" },
+    { "id": "array", "name": "배열" },
+    { "id": "class_object", "name": "클래스와 객체" },
+    { "id": "reference_string", "name": "참조 타입과 문자열" }
+  ],
+  "ox": [
+    {
+      "id": "ox_variable_operator_001",
+      "topic": "variable_operator",
+      "trues": [
+        "// 뒤의 내용은 한 줄 주석이다."
+      ],
+      "falses": [
+        "// 주석은 다음 줄까지 계속된다."
+      ]
+    },
+    {
+      "id": "ox_variable_operator_002",
+      "topic": "variable_operator",
+      "code": "int n = 7 / 2;",
+      "trues": [
+        "n의 값은 3이다."
+      ],
+      "falses": [
+        "n의 값은 3.5이다."
+      ]
+    },
+    {
+      "id": "ox_variable_operator_003",
+      "topic": "variable_operator",
+      "code": "int n = 7 % 3;",
+      "trues": [
+        "n의 값은 1이다."
+      ],
+      "falses": [
+        "n의 값은 2이다."
+      ]
+    },
+    {
+      "id": "ox_variable_operator_004",
+      "topic": "variable_operator",
+      "trues": [
+        "초기화한 final 변수는 다시 대입할 수 없다."
+      ],
+      "falses": [
+        "초기화한 final 변수는 다시 대입할 수 있다."
+      ]
+    },
+    {
+      "id": "ox_variable_operator_005",
+      "topic": "variable_operator",
+      "trues": [
+        "boolean의 값은 true 또는 false다."
+      ],
+      "falses": [
+        "boolean에는 정수 0과 1을 대입할 수 있다."
+      ]
+    },
+    {
+      "id": "ox_variable_operator_006",
+      "topic": "variable_operator",
+      "trues": [
+        "문자 리터럴은 작은따옴표로 감싼다."
+      ],
+      "falses": [
+        "문자 리터럴은 큰따옴표로 감싼다."
+      ]
+    },
+    {
+      "id": "ox_condition_loop_001",
+      "topic": "condition_loop",
+      "trues": [
+        "if문의 조건식은 boolean 타입이어야 한다."
+      ],
+      "falses": [
+        "if문의 조건식에는 int 값을 바로 쓸 수 있다."
+      ]
+    },
+    {
+      "id": "ox_condition_loop_002",
+      "topic": "condition_loop",
+      "code": "for (int i = 0; i < 3; i++) {\n    System.out.println(i);\n}",
+      "trues": [
+        "반복문 본문은 3번 실행된다."
+      ],
+      "falses": [
+        "반복문 본문은 4번 실행된다."
+      ]
+    },
+    {
+      "id": "ox_condition_loop_003",
+      "topic": "condition_loop",
+      "trues": [
+        "while문은 본문 실행 전에 조건을 검사한다."
+      ],
+      "falses": [
+        "while문은 본문을 실행한 뒤에만 조건을 검사한다."
+      ]
+    },
+    {
+      "id": "ox_condition_loop_004",
+      "topic": "condition_loop",
+      "trues": [
+        "do-while문의 본문은 최소 한 번 실행된다."
+      ],
+      "falses": [
+        "do-while문은 처음부터 본문을 건너뛸 수 있다."
+      ]
+    },
+    {
+      "id": "ox_condition_loop_005",
+      "topic": "condition_loop",
+      "trues": [
+        "라벨 없는 break로 현재 반복문을 끝낼 수 있다."
+      ],
+      "falses": [
+        "라벨 없는 break는 현재 반복만 건너뛴다."
+      ]
+    },
+    {
+      "id": "ox_condition_loop_006",
+      "topic": "condition_loop",
+      "trues": [
+        "반복문 안의 continue는 다음 반복으로 진행한다."
+      ],
+      "falses": [
+        "반복문 안의 continue는 반복문 전체를 끝낸다."
+      ]
+    },
+    {
+      "id": "ox_array_001",
+      "topic": "array",
+      "trues": [
+        "배열의 첫 번째 인덱스는 0이다."
+      ],
+      "falses": [
+        "배열의 첫 번째 인덱스는 1이다."
+      ]
+    },
+    {
+      "id": "ox_array_002",
+      "topic": "array",
+      "code": "int[] a = new int[3];",
+      "trues": [
+        "a.length의 값은 3이다."
+      ],
+      "falses": [
+        "a의 마지막 인덱스는 3이다."
+      ]
+    },
+    {
+      "id": "ox_array_003",
+      "topic": "array",
+      "code": "int[] a = new int[2];",
+      "trues": [
+        "a[0]의 초기값은 0이다."
+      ],
+      "falses": [
+        "a[0]의 초기값은 null이다."
+      ]
+    },
+    {
+      "id": "ox_array_004",
+      "topic": "array",
+      "trues": [
+        "생성한 배열의 길이는 바꿀 수 없다."
+      ],
+      "falses": [
+        "배열에 값을 넣으면 길이가 자동으로 늘어난다."
+      ]
+    },
+    {
+      "id": "ox_array_005",
+      "topic": "array",
+      "code": "int[] a = {10, 20, 30};",
+      "trues": [
+        "a[1]의 값은 20이다."
+      ],
+      "falses": [
+        "a[1]의 값은 10이다."
+      ]
+    },
+    {
+      "id": "ox_array_006",
+      "topic": "array",
+      "code": "int[] a = {1};\nint[] b = a;\nb[0] = 7;",
+      "trues": [
+        "a[0]의 값은 7이다."
+      ],
+      "falses": [
+        "a[0]의 값은 1이다."
+      ]
+    },
+    {
+      "id": "ox_class_object_001",
+      "topic": "class_object",
+      "trues": [
+        "생성자의 이름은 클래스 이름과 같다."
+      ],
+      "falses": [
+        "생성자의 이름은 임의로 정할 수 있다."
+      ]
+    },
+    {
+      "id": "ox_class_object_002",
+      "topic": "class_object",
+      "trues": [
+        "생성자에는 반환 타입을 적지 않는다."
+      ],
+      "falses": [
+        "생성자의 반환 타입은 void로 적는다."
+      ]
+    },
+    {
+      "id": "ox_class_object_003",
+      "topic": "class_object",
+      "trues": [
+        "this는 현재 객체를 가리킨다."
+      ],
+      "falses": [
+        "this는 부모 객체를 가리킨다."
+      ]
+    },
+    {
+      "id": "ox_class_object_004",
+      "topic": "class_object",
+      "trues": [
+        "인스턴스 필드는 객체마다 별도로 존재한다."
+      ],
+      "falses": [
+        "인스턴스 필드는 모든 객체가 하나를 공유한다."
+      ]
+    },
+    {
+      "id": "ox_class_object_005",
+      "topic": "class_object",
+      "trues": [
+        "같은 클래스의 객체들은 static 필드를 공유한다."
+      ],
+      "falses": [
+        "static 필드는 객체마다 별도로 생성된다."
+      ]
+    },
+    {
+      "id": "ox_class_object_006",
+      "topic": "class_object",
+      "trues": [
+        "오버로딩은 매개변수 타입 목록이 달라야 한다."
+      ],
+      "falses": [
+        "반환 타입만 다르면 메서드를 오버로딩할 수 있다."
+      ]
+    },
+    {
+      "id": "ox_reference_string_001",
+      "topic": "reference_string",
+      "trues": [
+        "String은 참조 타입이다."
+      ],
+      "falses": [
+        "String은 기본형 타입이다."
+      ]
+    },
+    {
+      "id": "ox_reference_string_002",
+      "topic": "reference_string",
+      "code": "String a = new String(\"hi\");\nString b = new String(\"hi\");",
+      "trues": [
+        "a.equals(b)는 true다."
+      ],
+      "falses": [
+        "a.equals(b)는 false다."
+      ]
+    },
+    {
+      "id": "ox_reference_string_003",
+      "topic": "reference_string",
+      "code": "String s = \"a\";\ns.concat(\"b\");",
+      "trues": [
+        "s의 내용은 \"a\"다."
+      ],
+      "falses": [
+        "s의 내용은 \"ab\"다."
+      ]
+    },
+    {
+      "id": "ox_reference_string_004",
+      "topic": "reference_string",
+      "code": "String s = null;",
+      "trues": [
+        "s는 현재 객체를 참조하지 않는다."
+      ],
+      "falses": [
+        "s는 빈 문자열 객체를 참조한다."
+      ]
+    },
+    {
+      "id": "ox_reference_string_005",
+      "topic": "reference_string",
+      "code": "String s = \"Java\";",
+      "trues": [
+        "s.length()의 값은 4다."
+      ],
+      "falses": [
+        "s.length()의 값은 3이다."
+      ]
+    },
+    {
+      "id": "ox_reference_string_006",
+      "topic": "reference_string",
+      "code": "String a = new String(\"hi\");\nString b = a;",
+      "trues": [
+        "a == b는 true다."
+      ],
+      "falses": [
+        "a == b는 false다."
+      ]
+    }
+  ],
+  "mc": [
+    {
+      "id": "mc_variable_operator_001",
+      "topic": "variable_operator",
+      "question": "출력 결과는?",
+      "code": "System.out.println(1 + 2 + \"3\");",
+      "correct": "33",
+      "wrongs": [
+        "123",
+        "6",
+        "컴파일 오류"
+      ]
+    },
+    {
+      "id": "mc_variable_operator_002",
+      "topic": "variable_operator",
+      "question": "출력 결과는?",
+      "code": "System.out.println(3 > 1 && 2 > 5);",
+      "correct": "false",
+      "wrongs": [
+        "true",
+        "0",
+        "컴파일 오류"
+      ]
+    },
+    {
+      "id": "mc_condition_loop_001",
+      "topic": "condition_loop",
+      "question": "출력 결과는?",
+      "code": "int sum = 0;\nfor (int i = 0; i < 3; i++) {\n    sum += i;\n}\nSystem.out.println(sum);",
+      "correct": "3",
+      "wrongs": [
+        "2",
+        "6",
+        "컴파일 오류"
+      ]
+    },
+    {
+      "id": "mc_condition_loop_002",
+      "topic": "condition_loop",
+      "question": "출력 결과는?",
+      "code": "int n = 2;\nwhile (n > 0) {\n    n--;\n}\nSystem.out.println(n);",
+      "correct": "0",
+      "wrongs": [
+        "1",
+        "2",
+        "컴파일 오류"
+      ]
+    },
+    {
+      "id": "mc_array_001",
+      "topic": "array",
+      "question": "출력 결과는?",
+      "code": "int[] a = {10, 20, 30};\nSystem.out.println(a[a.length - 1]);",
+      "correct": "30",
+      "wrongs": [
+        "10",
+        "20",
+        "실행 중 예외"
+      ]
+    },
+    {
+      "id": "mc_class_object_001",
+      "topic": "class_object",
+      "question": "Book 클래스의 생성자 선언은?",
+      "correct": "Book() {}",
+      "wrongs": [
+        "void Book() {}",
+        "int Book() { return 0; }",
+        "new Book()"
+      ]
+    },
+    {
+      "id": "mc_class_object_002",
+      "topic": "class_object",
+      "question": "출력 결과는?",
+      "code": "class Box { int value = 1; }\nBox a = new Box();\nBox b = new Box();\na.value = 9;\nSystem.out.println(b.value);",
+      "correct": "1",
+      "wrongs": [
+        "0",
+        "9",
+        "컴파일 오류"
+      ]
+    },
+    {
+      "id": "mc_reference_string_001",
+      "topic": "reference_string",
+      "question": "문자열 내용이 같은지 boolean으로 확인하는 메서드는?",
+      "correct": "equals()",
+      "wrongs": [
+        "length()",
+        "charAt()",
+        "isEmpty()"
+      ]
+    }
+  ]
+}

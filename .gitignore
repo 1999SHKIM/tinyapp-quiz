@@ -1,0 +1,16 @@
+# [참고] 플랫폼은 커밋된 빌드 파일을 사용하므로 dist는 제외하지 않는다.
+node_modules/
+*.local
+*.log
+.env
+.env.*
+!.env.example
+*.tsbuildinfo
+.DS_Store
+
+# [참고] 공개 레포에 올리지 않는 로컬 전용 폴더
+# - quizmd: 팀 내부 기획·검수 문서 사본
+# - tmp: 13번 SDK 확인용 옛 임시 화면 사본
+quizmd/
+tmp/
+
