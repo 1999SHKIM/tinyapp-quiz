@@ -12,7 +12,7 @@ export default function TopicSelectScreen({ bank, onStart, onBack, error }: {
   const picked = topics.filter((topic) => selected.includes(topic.id))
   const count = stageCount(picked.reduce((n, t) => n + t.oxCount, 0), picked.reduce((n, t) => n + t.mcCount, 0))
   return <section className="screen topics-screen">
-    <div className="eyebrow">PRACTICE / 연습 모드</div>
+    <header className="screen-header"><strong>연습 모드</strong></header>
     <h1>어떤 개념을 연습할까요?</h1>
     <p className="muted">주제를 하나 이상 골라 주세요. 연습 점수는 기록되지 않아요.</p>
     <div className="topic-list">{topics.map((topic) => <label className={selected.includes(topic.id) ? 'topic selected' : 'topic'} key={topic.id}>
@@ -20,8 +20,8 @@ export default function TopicSelectScreen({ bank, onStart, onBack, error }: {
         e.target.checked ? [...selected, topic.id] : selected.filter((id) => id !== topic.id),
       )} /><span>{topic.name}</span><small>OX {topic.oxCount} · 객관식 {topic.mcCount}</small>
     </label>)}</div>
+    <p className="message" role="status">{error || (selected.length > 0 && count === 0 ? '선택한 주제의 문제가 아직 준비되지 않았어요.' : '')}</p>
     <div className="screen-footer"><button className="quiet" onClick={onBack}>← 메뉴로</button>
       <span aria-live="polite">{count} 스테이지</span><button className="primary" disabled={count === 0} onClick={() => onStart(selected)}>연습 시작 →</button></div>
-    <p className="message" role="status">{error || (selected.length > 0 && count === 0 ? '선택한 주제의 문제가 아직 준비되지 않았어요.' : '')}</p>
   </section>
 }

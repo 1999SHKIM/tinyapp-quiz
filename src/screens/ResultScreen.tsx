@@ -22,10 +22,11 @@ export default function ResultScreen({ result, status, onRetry, onMenu }: {
   }, [result.totalScore, status])
   const corrects = result.records.filter((r) => r.correct).sort((a, b) => a.elapsedMs - b.elapsedMs)
   const wrongs = result.records.filter((r) => !r.correct)
+  // [참고] 시안 v10 배치: 최종 점수를 네온 상자로 강조하고, 왼쪽 플레이 요약(밝은 카드)과 오른쪽 오답 확인을 나란히 둔다.
   return <section className="screen result-screen">
-    <header className="result-header"><div><div className="eyebrow">JAVA QUIZ / RESULT</div>
-      <h1>{result.outcome === 'complete' ? '게임 컴플릿' : '게임오버'}</h1></div><div className="total-score"><small>최종 점수</small><strong>{result.totalScore.toLocaleString()}<span>점</span></strong></div></header>
-    <div className="result-columns"><div className="result-stats">
+    <header className="screen-header"><strong>{result.outcome === 'complete' ? '게임 컴플릿' : '게임오버'}</strong>
+      <div className="score-box neon"><small>최종 점수</small><strong>{result.totalScore.toLocaleString()}<span>점</span></strong></div></header>
+    <div className="result-columns"><div className="summary-card"><h2>플레이 요약</h2>
       <div className="stat-row"><span>도달 스테이지</span><strong>{result.records.at(-1)?.stage.number ?? 0}</strong></div>
       <div className="stat-row"><span>정답 / 오답</span><strong>{corrects.length} / {wrongs.length}</strong></div>
       <div className="stat-row"><span>스테이지 점수</span><strong>{result.stageScore.toLocaleString()}</strong></div>
