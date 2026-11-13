@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { FEEDBACK_MS, MAX_HEARTS, START_HEARTS } from '../config'
 import { heartBonus, stagePoints, total } from '../game/score'
 import { useCountdown } from '../game/useCountdown'
@@ -13,6 +13,7 @@ export default function GameScreen({ game, onFinish }: {
     records: [] as AnswerRecord[], feedback: null as AnswerRecord | null, feedbackUntil: 0,
   }))
   const locked = useRef(false)
+  const cardRef = useRef<HTMLElement>(null)
   const stage = game.stages[turn.index]
   const { remainingMs, readRemainingMs } = useCountdown(
     turn.startedAt, stage.limitMs, !turn.feedback, () => answer(null),
@@ -57,6 +58,28 @@ export default function GameScreen({ game, onFinish }: {
     return () => { window.clearInterval(timer); document.removeEventListener('visibilitychange', advance) }
   }, [turn, game, onFinish])
 
+  // [참고] 긴 코드만 글자를 줄여 문제 카드 안에 다 들어가게 한다.
+  // - 문제마다 글자 크기를 적어 두지 않고, 화면에 그린 뒤 실제로 넘치는지 잰다. 문제를 고치거나 늘려도 따로 손댈 필요가 없다.
+  // - useLayoutEffect는 브라우저가 화면에 그리기 직전에 실행된다. 큰 글자가 잠깐 보였다가 줄어드는 깜빡임이 없다.
+  // - 시안 크기 19.2px에서 시작해 한 단계씩 줄이고, 12px에서 멈춘다. 그래도 넘치면 카드 안 스크롤이 남는다.
+  // - D2Coding 글꼴이 늦게 도착하면 글자 폭이 달라지므로, 글꼴 준비가 끝난 뒤 한 번 더 잰다.
+  useLayoutEffect(() => {
+    const card = cardRef.current
+    if (!card) return
+    const sizes = [19.2, 18, 17, 16, 15, 14, 13, 12]
+    function fit() {
+      if (!card) return
+      for (const size of sizes) {
+        card.style.setProperty('--code-size', `${size}px`)
+        if (card.scrollHeight <= card.clientHeight + 1) break
+      }
+    }
+    fit()
+    let current = true
+    void document.fonts.ready.then(() => { if (current) fit() })
+    return () => { current = false }
+  }, [stage])
+
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
       if (event.repeat || event.ctrlKey || event.altKey || event.metaKey) return
@@ -72,18 +95,23 @@ export default function GameScreen({ game, onFinish }: {
   }, [stage.kind, answer])
 
   const displayedMs = turn.feedback ? stage.limitMs - turn.feedback.elapsedMs : remainingMs
+  // [참고] 시안 v10 배치: 위(제목·하트·점수) → 시간 막대 → 왼쪽 문제 카드 / 오른쪽 답 → 아래(진행·남은 시간)
+  // - chosen: 방금 고른 답. 시안의 선택 강조(청록)로 보여 주고, 정답·오답은 화면 테두리 색으로 따로 보여 준다.
+  const chosen = (value: boolean | number) => turn.feedback && turn.feedback.selectedAnswer === value ? 'chosen' : undefined
   return <section className={`screen game-screen ${turn.feedback ? (turn.feedback.correct ? 'feedback-correct' : 'feedback-wrong') : ''}`}>
-    <header className="game-header"><div><span className="eyebrow">{game.mode === 'practice' ? 'PRACTICE' : 'JAVA QUIZ'}</span>
-      <h1>STAGE {stage.number.toString().padStart(2, '0')} <small>/ {game.stages.length}</small></h1></div>
-      <div className="game-score"><span className="hearts" aria-label={`하트 ${turn.hearts}개`}>{'♥'.repeat(turn.hearts)}<span className="empty-hearts">{'♡'.repeat(MAX_HEARTS - turn.hearts)}</span></span><strong>{turn.score.toLocaleString()} <small>점</small></strong></div></header>
-    <div className="time-row"><span>{stage.kind === 'mc' ? 'SPECIAL · 객관식' : 'O / X'}</span>
-      <span className="heart-chance">{stage.heartReward ? '♥ 정답 시 하트 +1' : ''}</span><strong>{(displayedMs / 1000).toFixed(1)}초</strong></div>
+    <header className="screen-header"><strong>{game.mode === 'practice' ? 'Java 연습 모드' : 'Java 개념 퀴즈'}</strong>
+      <div className="game-status"><span className="hearts" aria-label={`하트 ${turn.hearts}개`}>{'♥'.repeat(turn.hearts)}<span className="empty-hearts">{'♡'.repeat(MAX_HEARTS - turn.hearts)}</span></span><strong>{turn.score.toLocaleString()}점</strong></div></header>
     <div className="timer-track" role="progressbar" aria-label="남은 시간" aria-valuemin={0} aria-valuemax={stage.limitMs / 1000} aria-valuenow={Number((displayedMs / 1000).toFixed(1))}><div style={{ width: `${100 * displayedMs / stage.limitMs}%` }} /></div>
-    {/* 코드가 있으면 코드를 먼저 보여 주고 그 아래에 문장을 둔다(03_28 §4-1). "실행하면 ~" 같은 문장은 코드를 본 뒤 읽어야 자연스럽다. */}
-    <div className={`question-area ${stage.kind}`}>{stage.code && <pre><code>{stage.code}</code></pre>}<h2>{stage.question}</h2></div>
-    <div className={stage.kind === 'ox' ? 'answers ox-answers' : 'answers mc-answers'}>
-      {stage.kind === 'ox' ? [true, false].map((value) => <button key={String(value)} disabled={!!turn.feedback} onClick={() => answer(value)} aria-label={value ? 'O 맞다' : 'X 틀리다'}>{value ? 'O' : 'X'}<span>{value ? '맞다' : '틀리다'}</span></button>)
-        : stage.options.map((option, i) => <button key={i} disabled={!!turn.feedback} onClick={() => answer(i)}><span className="option-number">{i + 1}</span><span>{option}</span></button>)}
-    </div><p className="input-hint">버튼을 눌러 선택 · 키보드 {stage.kind === 'ox' ? 'O / X' : '1 / 2 / 3 / 4'}</p>
+    <div className="game-content">
+      {/* 코드가 있으면 코드를 먼저 보여 주고 그 아래에 문장을 둔다(03_28 §4-1). "실행하면 ~" 같은 문장은 코드를 본 뒤 읽어야 자연스럽다. */}
+      <section ref={cardRef} className={`question-card ${stage.kind}`}><small>{stage.kind === 'mc' ? 'SPECIAL · 객관식' : 'O / X'}</small>{stage.code && <pre><code>{stage.code}</code></pre>}<h2>{stage.question}</h2></section>
+      <section className={stage.kind === 'ox' ? 'answers ox-answers' : 'answers mc-answers'} aria-label="답안">
+        {stage.kind === 'ox' ? [true, false].map((value) => <button key={String(value)} className={chosen(value)} disabled={!!turn.feedback} onClick={() => answer(value)} aria-label={value ? 'O 맞다' : 'X 틀리다'}><span className="answer-key">{value ? 'O' : 'X'}</span><span>{value ? '맞다' : '틀리다'}</span></button>)
+          : stage.options.map((option, i) => <button key={i} className={chosen(i)} disabled={!!turn.feedback} onClick={() => answer(i)}><span className="answer-key">{i + 1}</span><span>{option}</span></button>)}
+      </section>
+    </div>
+    <footer className="screen-footer game-footer"><span>문제 {stage.number.toString().padStart(2, '0')} / {game.stages.length}</span>
+      <span className="heart-chance">{stage.heartReward ? '♥ 정답 시 하트 +1' : ''}</span>
+      <span>키보드 {stage.kind === 'ox' ? 'O / X' : '1 / 2 / 3 / 4'}</span><b>{(displayedMs / 1000).toFixed(1)}초</b></footer>
   </section>
 }

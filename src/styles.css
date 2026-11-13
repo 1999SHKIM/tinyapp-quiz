@@ -1,93 +1,136 @@
-/* [참고] 800×500 화면을 App의 배율로 맞춘다. 남는 영역은 검은색이다. */
-:root { font-family: "Malgun Gothic", system-ui, sans-serif; color: #edf3f4; background: #000; font-synthesis: none; }
+/* [참고] 화면 시안 v10(docs/quiz-screen-v10.html)을 800×500 무대에 맞춘 스타일
+   - 시안은 화면 폭 기준 단위(cqw)를 쓴다. 무대가 항상 800px이므로 1cqw = 8px로 바꿔 적었다.
+   - 남는 영역은 검은색이다. 무대 크기는 App의 배율로 맞춘다. */
+
+/* [참고] 코드 글꼴 D2Coding (SIL OFL 1.1, 라이선스 전문은 assets/fonts/OFL.txt)
+   - font-display: swap은 글꼴을 받기 전에는 기본 고정폭 글꼴로 먼저 보여 준다. 문제 표시가 늦어지지 않게 하기 위해서다. */
+@font-face { font-family: D2Coding; src: url('./assets/fonts/D2Coding.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+
+:root {
+  --text: #f7f7ff; --muted: #d1cee8; --accent: #63e3e1; --accent-text: #6ee9e6; --accent-ink: #17283e;
+  --button: #393965; --button-line: #676391; --chip: #51517e;
+  --card: #f9f8ff; --card-ink: #242440; --card-label: #625195; --code-bg: #eae7fa; --code-ink: #38295f;
+  --heart: #ff9db2; --warn: #f5d58c;
+  font-family: "Malgun Gothic", system-ui, sans-serif; color: var(--text); background: #000; font-synthesis: none;
+}
 * { box-sizing: border-box; }
 body { margin: 0; overflow: hidden; }
 button, input { font: inherit; }
-button { color: inherit; cursor: pointer; border: 1px solid #43545d; border-radius: 12px; background: #202d35; padding: 12px 22px; font-weight: 700; }
-button:hover:not(:disabled) { background: #2e414b; border-color: #a4eee0; }
-button:disabled { opacity: .45; cursor: default; }
-button:focus-visible, input:focus-visible, .review-list:focus-visible { outline: 3px solid #fff0b0; outline-offset: 3px; }
-button.primary { color: #102c29; background: #a4eee0; border-color: #a4eee0; }
-button.primary:hover:not(:disabled) { background: #c3fff3; }
-button.quiet { background: transparent; }
 h1, h2, p { margin: 0; }
-h1 { font-size: 28px; letter-spacing: -1px; }
-h2 { font-size: 21px; line-height: 1.5; }
-small, .muted { color: #a8bbc4; }
-#stage { width: 800px; height: 500px; position: absolute; left: 50%; top: 50%; transform-origin: center; background: #142129; outline: none; overflow: hidden; }
-.screen { height: 100%; padding: 28px 36px; }
-.eyebrow { color: #a4eee0; font-size: 11px; font-weight: 800; letter-spacing: 2px; }
-.pill { display: inline-block; border: 1px solid #53685e; border-radius: 30px; padding: 5px 10px; color: #d8edb2; font-size: 10px; letter-spacing: 1px; }
-.menu-title { margin-top: 20px; }
-.menu-title h1 { font-size: 42px; margin: 12px 0 6px; display: flex; align-items: center; justify-content: space-between; }
-.menu-title h1 span { font-size: 18px; color: #a8bbc4; line-height: 1.7; font-weight: 400; letter-spacing: 0; }
-.menu-title p { color: #a8bbc4; font-size: 16px; }
-.rules-row { display: flex; gap: 28px; margin: 26px 0; font-size: 13px; color: #d8edb2; }
-.menu-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.menu-actions button { text-align: left; font-size: 21px; padding: 22px; }
-.menu-actions span { display: block; margin-top: 14px; font-size: 13px; font-weight: 400; }
-.message { min-height: 20px; margin-top: 14px; color: #d7cba7; font-size: 12px; }
-.topics-screen h1 { margin: 12px 0 8px; }
-.muted { font-size: 14px; line-height: 1.6; }
-.topic-list { display: grid; gap: 8px; margin: 18px 0; }
-.topic { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border: 1px solid #364b56; border-radius: 10px; cursor: pointer; font-size: 15px; }
-.topic input { width: 17px; height: 17px; accent-color: #a4eee0; margin: 0; }
+small, .muted { color: var(--muted); }
+pre { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+code, pre { font-family: D2Coding, Consolas, monospace; }
+
+#stage { width: 800px; height: 500px; position: absolute; left: 50%; top: 50%; transform-origin: center; background: #11132b; outline: none; overflow: hidden; }
+
+/* [참고] 모든 화면의 공통 틀: 시안의 .screen (안쪽 여백 4.5cqw, 남보라 그라데이션) */
+.screen { height: 100%; padding: 36px; display: flex; flex-direction: column; gap: 19px; font-size: 16px; background: linear-gradient(145deg, #302d67, #20234e 62%); }
+.screen-header, .screen-footer { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.screen-header > strong { font-size: 22px; }
+.screen-header > span { color: var(--muted); }
+.screen-footer { margin-top: auto; }
+.eyebrow { color: var(--accent-text); font-size: 11px; font-weight: 800; letter-spacing: 2px; }
+.message { min-height: 18px; color: var(--warn); font-size: 12px; }
+
+/* 버튼: 시안의 보라 버튼과 청록 강조 버튼 */
+button { cursor: pointer; color: inherit; border: 1px solid var(--button-line); border-radius: 8px; background: var(--button); padding: 10px 18px; font-weight: 700; }
+button:hover:not(:disabled) { filter: brightness(1.12); }
+button:disabled { opacity: .45; cursor: default; }
+button:focus-visible, input:focus-visible, .review-list:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+button.quiet { background: transparent; }
+
+/* [참고] 메뉴·결과 화면의 네온 테두리
+   - 상자 테두리는 그라데이션 2개를 겹쳐 만든다(padding-box는 안쪽 색, border-box는 테두리 색).
+   - ::before(왼쪽 위 청록)와 ::after(오른쪽 아래 보라)로 바깥 모서리 선을 하나씩 더한다. */
+.menu-screen, .result-screen { background: radial-gradient(ellipse at 15% 25%, #253e68, transparent 55%), radial-gradient(ellipse at 85% 75%, #49266e, transparent 54%), #181833; }
+.neon { position: relative; border: 2px solid transparent; background: linear-gradient(130deg, #202044, #262044) padding-box, linear-gradient(125deg, #64fff1, #86a5ff 50%, #d379ff) border-box; box-shadow: -5px -4px 22px #58fff13b, 6px 6px 24px #c260ff50; }
+.neon::before { content: ''; position: absolute; inset: -7px 16% 42% -7px; border-top: 2px solid #64fff1; border-left: 2px solid #64fff1; border-radius: inherit; pointer-events: none; }
+.neon::after { content: ''; position: absolute; inset: 42% -7px -7px 16%; border-bottom: 2px solid #d379ff; border-right: 2px solid #d379ff; border-radius: inherit; pointer-events: none; }
+
+/* 메뉴 */
+.menu-hero { align-self: center; width: 78%; margin: auto 0 0; padding: 26px 40px; border-radius: 32px; text-align: center; }
+.menu-hero h1 { font-size: 56px; letter-spacing: -4px; }
+.menu-hero p { color: var(--muted); margin-top: 8px; }
+.rules-row { display: flex; justify-content: center; gap: 24px; font-size: 12px; color: var(--muted); }
+.modes { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.modes button { min-height: 88px; display: grid; align-content: center; gap: 4px; padding: 13px 18px; text-align: left; }
+.modes strong { font-size: 22px; }
+.modes button span { color: #dfdff3; font-size: 13px; font-weight: 400; }
+.modes button.primary span { color: #234353; }
+.menu-screen .message { margin-top: -8px; }
+
+/* 주제 선택 */
+.topics-screen h1 { font-size: 26px; letter-spacing: -1px; }
+.topics-screen .muted { font-size: 13px; margin-top: -12px; }
+.topic-list { display: grid; gap: 6px; }
+.topic { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 6px; background: var(--button); cursor: pointer; font-size: 15px; }
+.topic input { width: 16px; height: 16px; margin: 0; accent-color: var(--accent); }
 .topic small { margin-left: auto; font-size: 12px; }
-.topic.selected { border-color: #a4eee0; background: #233d3c; }
-.screen-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-.screen-footer > span { color: #a4eee0; font-size: 14px; }
-.notice-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; }
-.notice-symbol { font: 700 52px monospace; color: #a4eee0; }
-.notice-screen button { min-width: 240px; margin-top: 10px; }
-.game-screen { padding: 24px 32px 14px; border: 4px solid transparent; }
-.game-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
-.game-header h1 { margin-top: 6px; font-size: 26px; }
-.game-header h1 small { font-size: 16px; letter-spacing: 0; }
-.game-score { display: flex; align-items: center; gap: 22px; }
-.game-score strong { font-size: 25px; min-width: 110px; text-align: right; font-variant-numeric: tabular-nums; }
-.game-score small { font-size: 14px; }
-.hearts { color: #f598a9; font-size: 25px; letter-spacing: 4px; }
-.empty-hearts { color: #73818a; }
-.time-row { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #a4eee0; }
-.time-row strong { font-size: 17px; font-variant-numeric: tabular-nums; }
-.heart-chance { color: #f598a9; margin-left: auto; margin-right: 16px; }
-.timer-track { height: 5px; background: #34464f; margin-top: 7px; border-radius: 4px; overflow: hidden; }
-.timer-track div { height: 100%; background: #a4eee0; }
-.question-area { display: flex; flex-direction: column; justify-content: center; gap: 10px; }
-.question-area.ox { height: 205px; }
-.question-area.mc { height: 204px; }
-.question-area.ox h2 { font-size: 25px; }
-.question-area.mc h2 { font-size: 20px; }
-pre { white-space: pre-wrap; overflow-wrap: anywhere; font-family: Consolas, monospace; margin: 0; padding: 10px 16px; background: #0c171d; border-radius: 8px; }
-.question-area pre { font-size: 16px; line-height: 19px; }
-.answers { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.ox-answers button { height: 84px; font-size: 34px; }
-.ox-answers button span { font-size: 15px; margin-left: 18px; vertical-align: middle; }
-.mc-answers button { min-height: 46px; padding: 8px 12px; display: flex; align-items: center; gap: 12px; text-align: left; font-size: 15px; line-height: 1.3; overflow-wrap: anywhere; }
-.option-number { color: #a4eee0; border: 1px solid #52616a; border-radius: 5px; padding: 2px 6px; flex: none; }
-.input-hint { font-size: 11px; color: #8fa6b1; text-align: center; margin-top: 12px; }
-.feedback-correct { border-color: #7de6b0; background: #1f4034; }
-.feedback-wrong { border-color: #f28e9c; background: #492a33; }
+.topic.selected { background: #474d7d; }
+.screen-footer > span { color: var(--accent-text); font-size: 14px; }
+.topics-screen .message { margin-top: -12px; }
+
+/* 시작 안내 (App의 '플랫폼 연결 중' 화면도 같은 틀을 쓴다) */
+.notice-screen { align-items: center; justify-content: center; text-align: center; }
+.notice-screen h1 { font-size: 32px; letter-spacing: -1px; }
+.notice-screen p { color: var(--muted); margin-top: -8px; }
+/* [참고] 시작 버튼: 시안 기준 약 216×64px, 청록→보라 그라데이션과 은은한 빛 */
+.notice-screen button.primary { min-width: 216px; min-height: 64px; margin-top: 8px; padding: 11px 24px; font-size: 24px; font-weight: 800; color: #171b38; border: 2px solid transparent; border-radius: 16px; background: linear-gradient(110deg, #74f5ea, #b8a3ff) padding-box, linear-gradient(120deg, #c6fff8, #d6acff) border-box; box-shadow: 0 0 20px #67eceb66, 0 5px 24px #ad77ff66; }
+
+/* [참고] 문제 화면: 왼쪽 밝은 문제 카드(코드 + 질문), 오른쪽 답 버튼 세로 나열 (시안 1.22 : 1)
+   - 바깥 테두리 4px은 정답(초록)·오답(빨강) 표시용이다. 평소에는 투명하다. */
+.game-screen { padding: 32px; border: 4px solid transparent; }
+.game-status { display: flex; align-items: center; gap: 14px; color: var(--muted); }
+.hearts { color: var(--heart); font-size: 20px; letter-spacing: 3px; }
+.empty-hearts { color: #8b88aa; }
+.game-status strong { color: var(--text); font-size: 20px; min-width: 88px; text-align: right; font-variant-numeric: tabular-nums; }
+.timer-track { height: 5px; flex: none; border-radius: 20px; background: #494976; overflow: hidden; }
+.timer-track div { height: 100%; background: #66e5e2; }
+.game-content { flex: 1; min-height: 0; display: grid; grid-template-columns: 1.22fr 1fr; gap: 21px; }
+/* - 문제 카드가 넘치면 무대 밖으로 나가지 않고 카드 안에서 스크롤된다(긴 코드 측정 대상).
+   - safe center: 내용이 칸보다 작으면 가운데, 넘치면 위에서부터 놓는다. 그냥 center면 넘친 윗부분이 잘려 스크롤로도 못 본다. */
+.question-card { min-height: 0; overflow: auto; display: flex; flex-direction: column; justify-content: safe center; gap: 17px; padding: 26px; border-radius: 14px; background: var(--card); color: var(--card-ink); }
+.question-card small { color: var(--card-label); font-weight: 750; }
+.question-card pre { padding: 16px; border-radius: 8px; background: var(--code-bg); color: var(--code-ink); font-size: var(--code-size, 19.2px); line-height: 1.5; }
+.question-card h2 { font-size: 25px; line-height: 1.3; letter-spacing: -1px; }
+.answers { display: grid; gap: 9px; min-height: 0; }
+.ox-answers { grid-template-rows: repeat(2, 1fr); }
+.mc-answers { grid-template-rows: repeat(4, 1fr); }
+.answers button { display: flex; align-items: center; gap: 12px; padding: 0 12px; text-align: left; font-size: 16px; line-height: 1.3; overflow-wrap: anywhere; }
+.answer-key { flex: none; padding: 4px 7px; border-radius: 5px; background: var(--chip); }
+.ox-answers .answer-key { font-size: 24px; padding: 4px 12px; }
+.game-footer { font-size: 12px; color: var(--muted); }
+.game-footer b { color: var(--accent-text); font-size: 16px; font-variant-numeric: tabular-nums; }
+.heart-chance { color: var(--heart); }
+/* [참고] 고른 답(시안의 선택 강조, 청록)과 정답·오답 결과(화면 테두리·바탕의 초록·빨강)를 따로 보여 준다. */
+.answers button.chosen { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.answers button.chosen .answer-key { background: #ffffff65; }
+.feedback-correct { border-color: #7de6b0; background: linear-gradient(145deg, #1f4a42, #183a35 62%); }
+.feedback-wrong { border-color: #f28e9c; background: linear-gradient(145deg, #4f2a44, #3a2034 62%); }
 .feedback-correct button:disabled, .feedback-wrong button:disabled { opacity: 1; }
-.result-screen { padding: 24px 32px; }
-.result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
-.result-header h1 { margin-top: 7px; }
-.total-score { display: flex; align-items: center; gap: 16px; }
-.total-score strong { color: #a4eee0; font-size: 40px; }
-.total-score strong span { font-size: 16px; margin-left: 6px; }
-.result-columns { display: grid; grid-template-columns: 1fr 1.2fr; gap: 26px; height: 274px; }
-.stat-row { display: flex; justify-content: space-between; font-size: 13px; padding: 8px 0; border-bottom: 1px solid #31434d; }
-.stat-row span { color: #a8bbc4; }
-.time-stat { margin-top: 12px; }
-.time-stat small { font-size: 11px; }
-.time-stat p { margin-top: 4px; font-size: 12px; line-height: 1.5; }
-.review-panel { background: #0c171d; border-radius: 12px; padding: 14px 18px; min-height: 0; }
-.review-panel h2 { font-size: 15px; margin-bottom: 8px; }
-.review-panel h2 span { color: #f598a9; margin-left: 6px; }
-.review-list { height: 213px; overflow-y: auto; padding-right: 8px; scrollbar-color: #536b78 #0c171d; }
-.review-list article { padding: 10px 0; border-bottom: 1px solid #31434d; }
+
+/* 결과 */
+.score-box { padding: 6px 19px; border-radius: 16px; color: #f2e9ff; display: flex; align-items: baseline; gap: 10px; }
+.score-box small { font-size: 12px; }
+.score-box strong { font-size: 32px; }
+.score-box strong span { font-size: 15px; margin-left: 4px; }
+.result-columns { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1.2fr; gap: 16px; }
+.summary-card { min-height: 0; padding: 14px 20px; border-radius: 14px; background: var(--card); color: var(--card-ink); display: flex; flex-direction: column; justify-content: center; }
+.summary-card h2 { font-size: 16px; margin-bottom: 4px; }
+.stat-row { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px solid #dcd8ee; }
+.stat-row span { color: var(--card-label); }
+.time-stat { margin-top: 8px; }
+.time-stat small { font-size: 11px; color: var(--card-label); }
+.time-stat p { margin-top: 2px; font-size: 12px; line-height: 1.4; }
+.review-panel { min-height: 0; display: flex; flex-direction: column; padding: 14px 18px; border-radius: 14px; background: var(--button); }
+.review-panel h2 { font-size: 16px; margin-bottom: 6px; }
+.review-panel h2 span { color: var(--heart); margin-left: 6px; }
+.review-list { flex: 1; min-height: 0; overflow-y: auto; padding-right: 8px; scrollbar-color: #7a77a8 var(--button); }
+.review-list article { padding: 8px 0; border-bottom: 1px solid #55557f; }
 .review-list small { font-size: 10px; }
-.review-list p { font-size: 13px; line-height: 1.6; margin: 5px 0; }
-.review-list pre { padding: 6px; font-size: 11px; line-height: 1.5; background: #1b2a33; }
-.review-list strong { display: block; font-size: 12px; color: #a4eee0; margin-top: 6px; }
-.record-message { font-size: 12px; color: #d7cba7; margin: 13px 0; min-height: 18px; }
+.review-list p { font-size: 13px; line-height: 1.5; margin: 4px 0; }
+.review-list pre { padding: 6px 8px; border-radius: 6px; font-size: 12px; line-height: 1.5; background: var(--code-bg); color: var(--code-ink); }
+.review-list strong { display: block; font-size: 12px; color: var(--accent-text); margin-top: 4px; }
+.record-message { font-size: 12px; color: var(--warn); min-height: 16px; margin-top: -8px; }
+.result-screen .screen-footer { margin-top: -8px; }
